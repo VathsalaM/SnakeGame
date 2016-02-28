@@ -5,27 +5,27 @@ import java.awt.*;
  * Created by vathsala on 27/02/16.
  */
 public class Board extends JFrame {
-    private Dimension dimension;
+    private Coordinate dimension;
 
-    public Board(Dimension d) {
+    public Board(Coordinate d) {
         this.dimension = d;
     }
 
-    public Dimension getDimension() {
+    public Coordinate getDimension() {
         return dimension;
     }
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("function called");
-        g.setColor(Color.orange);
-        g.fillRect(35, 45, 75, 95);
-        g.setColor(Color.black);
-        g.drawRect(35, 45, 75, 95);
+        System.out.println(" paint called");
+        g.setColor(new Color(255, 3, 2));
+        g.fillRect(50, 50, 5, 5);
     }
 
-    public void fillColour() {
-        System.out.println(" fill called");
-        this.repaint();
+    public void fillColour(){
+        Coordinate boardCords = new Coordinate(100, 100);
+        Board b = new Board(boardCords);
+        Graphics g = b.getGraphics();
+        b.paint(g);
     }
 }

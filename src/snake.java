@@ -3,11 +3,14 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class Snake extends JFrame implements KeyListener {
     public ArrayList<Coordinate> body;
     public Coordinate prev;
+    private Timer currentTimer;
 
     public ArrayList<Coordinate> getBody() {
         return body;
@@ -22,35 +25,23 @@ public class Snake extends JFrame implements KeyListener {
     }
 
     public Snake move(String direction) {
+        Coordinate coordinates = this.body.get(0);
+        this.prev = coordinates;
+        Coordinate newCoordinate = null;
         if (direction == "up") {
-            Coordinate coordinates = this.body.get(0);
-            this.prev = coordinates;
-            Coordinate newCoordinate = new Coordinate(coordinates.getX(), coordinates.getY() - 1);
-            this.body.set(0, newCoordinate);
-            this.repaint();
+            newCoordinate = new Coordinate(coordinates.getX(), coordinates.getY() - 1);
         }
         if (direction == "down") {
-            Coordinate coordinates = this.body.get(0);
-            this.prev = coordinates;
-            Coordinate newCoordinate = new Coordinate(coordinates.getX(), coordinates.getY() + 1);
-            this.body.set(0, newCoordinate);
-            this.repaint();
+            newCoordinate = new Coordinate(coordinates.getX(), coordinates.getY() + 1);
         }
         if (direction == "right") {
-            Coordinate coordinates = this.body.get(0);
-            this.prev = coordinates;
-            Coordinate newCoordinate = new Coordinate(coordinates.getX() + 1, coordinates.getY());
-            this.body.set(0, newCoordinate);
-            this.repaint();
-
+            newCoordinate = new Coordinate(coordinates.getX() + 1, coordinates.getY());
         }
         if (direction == "left") {
-            Coordinate coordinates = this.body.get(0);
-            this.prev = coordinates;
-            Coordinate newCoordinate = new Coordinate(coordinates.getX() - 1, coordinates.getY());
-            this.body.set(0, newCoordinate);
-            this.repaint();
+            newCoordinate = new Coordinate(coordinates.getX() - 1, coordinates.getY());
         }
+        this.body.set(0, newCoordinate);
+        this.repaint();
         return this;
 
     }
@@ -62,6 +53,8 @@ public class Snake extends JFrame implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (currentTimer != null)
+            currentTimer.cancel();
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             this.move("up");
         }
@@ -77,8 +70,23 @@ public class Snake extends JFrame implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-
+    public void keyReleased(final KeyEvent e) {
+        final Snake snake = this;
+        Timer timer = new Timer();
+        currentTimer = timer;
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (e.getKeyCode() == 38)
+                    snake.move("up");
+                if (e.getKeyCode() == 40)
+                    snake.move("down");
+                if (e.getKeyCode() == 39)
+                    snake.move("right");
+                if (e.getKeyCode() == 37)
+                    snake.move("left");
+            }
+        }, 1, 15);
     }
 
     @Override
@@ -97,6 +105,10 @@ public class Snake extends JFrame implements KeyListener {
         Coordinate c1 = new Coordinate(100, 100);
         cords.add(c1);
         Snake m = new Snake(cords);
+//        Coordinate boardCords = new Coordinate(100, 100);
+//        Board b = new Board(boardCords);
+//        System.out.println("calling repaint........");
+//        b.fillColour();
         m.repaint();
         m.addKeyListener(m);
     }
