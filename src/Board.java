@@ -17,17 +17,15 @@ public class Board extends JFrame {
 
     @Override
     public void paint(Graphics g) {
-//        super.paint(g);
         System.out.println("function called");
         g.setColor(Color.orange);
-        g.fillRect(35,45,75,95);
+        g.fillRect(35, 45, 75, 95);
         g.setColor(Color.black);
         g.drawRect(35, 45, 75, 95);
     }
 
-    public void fillColour(){
+    public void fillColour() {
         System.out.println(" fill called");
         this.repaint();
     }
-
 }
